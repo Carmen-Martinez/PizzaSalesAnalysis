@@ -45,28 +45,28 @@ SET 3rd_main_ingredient =
 ;
 
 -- Locating Duplicates
--- No duplicates found
 SELECT pizza_id, COUNT(CONCAT(order_id, pizza_name_id))
 FROM pizza_sales
 GROUP BY pizza_id
 HAVING COUNT(CONCAT(order_id, pizza_name_id)) = 1
+;
+
+-- [No duplicates found]
 
 -- STANDARDIZING COLUMNS
-/*
--- Checking for unique values in multiple columns
-SELECT COUNT(DISTINCT(order_id))
-FROM pizza_sales;
+-- removing special characters & extra space
+UPDATE pizza_sales
+SET 1st_main_ingredient =  TRIM(REGEXP_REPLACE(1st_main_ingredient, '[^a-zA-Z0-9 ]', ''))
+;
 
-SELECT DISTINCT(pizza_category)
-FROM pizza_sales;
+UPDATE pizza_sales
+SET 2nd_main_ingredient =  TRIM(REGEXP_REPLACE(2nd_main_ingredient, '[^a-zA-Z0-9 ]', ''))
+;
 
--- Top 10 most popular pizza
-SELECT pizza_name, COUNT(pizza_name) AS num_pizza_orders
-FROM pizza_sales
-GROUP BY pizza_name
-ORDER BY COUNT(pizza_name) DESC
-LIMIT 10;
-*/
+UPDATE pizza_sales
+SET 3rd_main_ingredient =  TRIM(REGEXP_REPLACE(3rd_main_ingredient, '[^a-zA-Z0-9 ]', ''))
+;
 
-
-
+-- Dropping pizza_ingredients column
+ALTER TABLE pizza_sales
+DROP COLUMN pizza_ingredients
