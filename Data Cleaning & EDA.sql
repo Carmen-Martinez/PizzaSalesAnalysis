@@ -64,15 +64,23 @@ SET 2nd_main_ingredient =  TRIM(REGEXP_REPLACE(2nd_main_ingredient, '[^a-zA-Z0-9
 UPDATE pizza_sales
 SET 3rd_main_ingredient =  TRIM(REGEXP_REPLACE(3rd_main_ingredient, '[^a-zA-Z0-9 ]', ''));
 
-/*
-SELECT *
-FROM pizza_sales
-WHERE order_date = '2015-01-13' ;
+-- Updating dates with incorect date format
+UPDATE pizza_sales 
+SET order_date = DATE_FORMAT(STR_TO_DATE(order_date, '%d-%m-%Y'), '%m/%d/%Y')
+WHERE order_date REGEXP '^[0-9]{2}-[0-9]{2}-[0-9]{4}';
 
+-- Updating dates from string to date format
+UPDATE pizza_sales 
+SET order_date = DATE_FORMAT(STR_TO_DATE(order_date, '%m/%d/%Y'), '%m/%d/%Y')
+WHERE order_date REGEXP '^[0-9]{2}-[0-9]{2}-[0-9]{4}';
+
+-- Formatting all dates from string to date
 UPDATE pizza_sales
-SET order_date =  DATE_FORMAT(str_to_date(order_date, '%d-%m-%Y'), '%m-%d-%y')
-WHERE str_to_date(order_date, '%d-%m-%Y') = '01-13-2015';
-*/
+SET order_date = STR_TO_DATE(order_date, '%m/%d/%Y');
+
+# Updating order_date column from TEXT to DATE datatype
+ALTER TABLE pizza_sales 
+MODIFY order_date DATE;
 
 # Dropping pizza_ingredients column
 ALTER TABLE pizza_sales
@@ -142,6 +150,28 @@ FROM (
     LIMIT 10
 ) AS Top_10_Pizzas;
 -- [The TOP 10 Pizza's total revenue is 2x the BOTTOM 10 Pizza's total revenue]
+
+# most favorite ingredient
+SELECT DISTINCT(1st_main_ingredient), COUNT(1st_main_ingredient) AS fav_1st_main_ingredient -- , 2nd_main_ingredient, 3rd_main_ingredient
+FROM pizza_sales
+GROUP BY 1st_main_ingredient
+ORDER BY fav_1st_main_ingredient DESC;
+-- [Chicken is the most favorite main ingredient on pizza]
+
+# 2nd most favorite ingredient
+SELECT DISTINCT(2nd_main_ingredient), COUNT(2nd_main_ingredient) AS fav_2nd_main_ingredient -- , 2nd_main_ingredient, 3rd_main_ingredient
+FROM pizza_sales
+GROUP BY 2nd_main_ingredient
+ORDER BY fav_2nd_main_ingredient DESC;
+-- [mushroom is the 2nd most favoite ingredient, if we assume tomato is not a topping but part of all pizzas]
+
+# 3rd most favorite ingredient
+SELECT DISTINCT(3rd_main_ingredient), COUNT(3rd_main_ingredient) AS fav_3rd_main_ingredient -- , 2nd_main_ingredient, 3rd_main_ingredient
+FROM pizza_sales
+GROUP BY 3rd_main_ingredient
+ORDER BY fav_3rd_main_ingredient DESC
+
+
 
 
 
