@@ -1,5 +1,3 @@
-### Data Cleaning and EDA ###
-
 ## CLEANING DATA
 
 SELECT *
@@ -54,6 +52,7 @@ HAVING COUNT(CONCAT(order_id, pizza_name_id)) = 1;
 
 ## STANDARDIZING COLUMNS ##
 
+##  TEXT DATATYPES
 # removing special characters & extra space
 UPDATE pizza_sales
 SET 1st_main_ingredient =  TRIM(REGEXP_REPLACE(1st_main_ingredient, '[^a-zA-Z0-9 ]', ''));
@@ -64,6 +63,7 @@ SET 2nd_main_ingredient =  TRIM(REGEXP_REPLACE(2nd_main_ingredient, '[^a-zA-Z0-9
 UPDATE pizza_sales
 SET 3rd_main_ingredient =  TRIM(REGEXP_REPLACE(3rd_main_ingredient, '[^a-zA-Z0-9 ]', ''));
 
+## DATE DATATYPES
 -- Updating dates with incorect date format
 UPDATE pizza_sales 
 SET order_date = DATE_FORMAT(STR_TO_DATE(order_date, '%d-%m-%Y'), '%m/%d/%Y')
@@ -82,6 +82,16 @@ SET order_date = STR_TO_DATE(order_date, '%m/%d/%Y');
 ALTER TABLE pizza_sales 
 MODIFY order_date DATE;
 
-# Dropping pizza_ingredients column
+UPDATE pizza_sales
+SET order_time = STR_TO_DATE(order_time, '%H:%i:%s')
+WHERE order_time LIKE '%:%:%';
+
+ALTER TABLE pizza_sales
+MODIFY COLUMN order_time TIME;
+
+# DROPPING COLUMNS
 ALTER TABLE pizza_sales
 DROP COLUMN pizza_ingredients;
+
+
+

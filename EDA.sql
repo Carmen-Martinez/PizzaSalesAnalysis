@@ -1,5 +1,8 @@
 ## EXPLORATORY DATA ANALYSIS ##
 
+SELECT *
+FROM pizza_sales;
+
 # Unique orders placed
 SELECT COUNT(DISTINCT(order_id))
 FROM pizza_sales;
@@ -71,5 +74,26 @@ ORDER BY fav_3rd_main_topping DESC;
 SELECT DATEDIFF(MAX(order_date), MIN(order_date)) + 1, ROUND(SUM(total_price),2) AS total_rev
 FROM pizza_sales;
 -- [$817,860 total revenue in 1 year]
+
+# What is peak hour(s) of pizza orders?
+SELECT HOUR(order_time) AS order_hour, COUNT(HOUR(order_time)) as Hour_Count
+FROM pizza_sales
+GROUP BY HOUR(order_time)
+ORDER BY COUNT(HOUR(order_time)) DESC;
+-- [most pizzas are ordered between 1-2pm and 5-7pm]
+
+-- What date did they receive the most unique orders?
+SELECT order_date, COUNT(DISTINCT(order_id)) AS order_count
+FROM pizza_sales
+GROUP BY order_date
+ORDER BY order_count DESC;
+-- [Peak number of pizzas ordered were on 11/26/2015 AND 11/27/2015]
+
+SELECT pizza_name, ROUND(AVG(quantity),2) AS avg_order_count
+FROM pizza_sales
+GROUP BY pizza_name
+ORDER BY avg_order_count DESC
+-- [Most people order 1 pizza per order, 
+-- [though their is a higher frequency of The Big]
 
 
