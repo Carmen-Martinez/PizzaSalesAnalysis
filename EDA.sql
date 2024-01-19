@@ -82,18 +82,33 @@ GROUP BY HOUR(order_time)
 ORDER BY COUNT(HOUR(order_time)) DESC;
 -- [most pizzas are ordered between 1-2pm and 5-7pm]
 
--- What date did they receive the most unique orders?
+# What date did they receive the most unique orders?
 SELECT order_date, COUNT(DISTINCT(order_id)) AS order_count
 FROM pizza_sales
 GROUP BY order_date
 ORDER BY order_count DESC;
 -- [Peak number of pizzas ordered were on 11/26/2015 AND 11/27/2015]
 
+# Which pizzas are ordered more than once?
 SELECT pizza_name, ROUND(AVG(quantity),2) AS avg_order_count
 FROM pizza_sales
 GROUP BY pizza_name
-ORDER BY avg_order_count DESC
--- [Most people order 1 pizza per order, 
--- [though their is a higher frequency of The Big]
+ORDER BY avg_order_count DESC;
+-- [Most people order 1 pizza per order]
+-- [though there is a higher frequency of ordering more than 1 'The Big Meat Pizza" in a single order]
+
+-- What is the most popular pizza size?
+SELECT pizza_size, COUNT(pizza_size) AS pizza_size_cnt
+FROM pizza_sales
+GROUP BY pizza_size
+ORDER BY pizza_size_cnt DESC;
+-- [Most people order Large Pizzas, with few ordering XL or XXL]
+
+# Which Pizza + Size is the most popular?
+SELECT pizza_name_id, COUNT(pizza_name_id) AS pizza_name_size
+FROM pizza_sales
+GROUP BY pizza_name_id
+ORDER BY pizza_name_size DESC
+-- [most common pizza ordered is the Medium-sized Big Meat Pizza]
 
 
