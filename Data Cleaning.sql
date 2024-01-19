@@ -88,7 +88,7 @@ WHERE order_time LIKE '%:%:%';
 ALTER TABLE pizza_sales
 MODIFY COLUMN order_time TIME;
 
-# DROPPING COLUMNS
+## DROPPING COLUMNS ##
 ALTER TABLE pizza_sales
 DROP COLUMN pizza_ingredients;
 
