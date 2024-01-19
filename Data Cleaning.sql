@@ -1,5 +1,6 @@
 ## CLEANING DATA
 
+## UPDATING COLUMNS ##
 SELECT *
 FROM pizza_sales;
 
@@ -34,7 +35,7 @@ SELECT *,
     END
 FROM pizza_sales;
 
--- updating 3rd_main_ingredient column
+# updating 3rd_main_ingredient column
 UPDATE pizza_sales
 SET 3rd_main_ingredient =  
 	CASE
@@ -42,16 +43,14 @@ SET 3rd_main_ingredient =
         ELSE 3rd_main_ingredient
     END;
 
-## Locating Duplicates ##
-
+## LOCATING DUPLICATES ##
 SELECT pizza_id, COUNT(CONCAT(order_id, pizza_name_id))
 FROM pizza_sales
 GROUP BY pizza_id
-HAVING COUNT(CONCAT(order_id, pizza_name_id)) = 1;
+HAVING COUNT(CONCAT(order_id, pizza_name_id)) > 1;
 -- [No duplicates found]
 
 ## STANDARDIZING COLUMNS ##
-
 ##  TEXT DATATYPES
 # removing special characters & extra space
 UPDATE pizza_sales
